@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MY JARVIS</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{margin:0;background:#080e19;color:#e8f4ff;font-family:Arial,sans-serif;padding:18px}
+
+header{text-align:center;padding:25px 0}
+
+h1{color:#45d9ff;letter-spacing:4px}
+
+.sub{color:#8ba9c3;font-size:13px}
+
+section{background:#111d2d;border:1px solid #25445d;border-radius:14px;padding:16px;margin:14px 0}
+
+h2{font-size:17px;color:#54dfff;margin-top:0}
+
+input,textarea,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #36546b;background:#091421;color:white;font-size:15px}
+
+button{background:#087da5;border:0;font-weight:bold}
+
+button:active{opacity:.7}
+
+.item{padding:10px;border-bottom:1px solid #294052;overflow-wrap:anywhere}
+
+.small{font-size:12px;color:#91a9bd}
+
+#chat{height:180px;overflow:auto;background:#091421;padding:10px;border-radius:8px}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>MY JARVIS</h1>
+
+<div class="sub">YOUR PERSONAL AI ASSISTANT</div>
+
+<p id="clock"></p>
+
+</header>
+
+<section>
+
+<h2>💬 AIチャット（デモ）</h2>
+
+<div id="chat">JARVIS：こんにちは！何でも話しかけてください。</div>
+
+<input id="message" placeholder="メッセージを入力">
+
+<button onclick="sendMessage()">送信</button>
+
+<button onclick="voiceInput()">🎤 音声入力</button>
+
+<button onclick="speak('こんにちは。今日もよろしくお願いします。')">🔊 音声テスト</button>
+
+<p class="small">※現在はデモ版です。本物のAIとの接続はまだありません。</p>
+
+</section>
+
+<section>
+
+<h2>✅ タスク管理</h2>
+
+<input id="task" placeholder="やることを入力">
+
+<button onclick="addTask()">タスク追加</button>
+
+<div id="tasks"></div>
+
+</section>
+
+<section>
+
+<h2>💰 収支管理</h2>
+
+<input id="amount" type="number" placeholder="金額（円）">
+
+<select id="kind">
+
+<option value="income">収入</option>
+
+<option value="expense">支出</option>
+
+</select>
+
+<input id="memo" placeholder="内容">
+
+<button onclick="addMoney()">記録する</button>
+
+<div id="money"></div>
+
+</section>
+
+<section>
+
+<h2>💡 アイデアノート</h2>
+
+<textarea id="idea" rows="3" placeholder="思いついたことを書く"></textarea>
+
+<button onclick="addIdea()">保存</button>
+
+<div id="ideas"></div>
+
+</section>
+
+<section>
+
+<h2>🔎 インターネット検索</h2>
+
+<input id="search" placeholder="検索したい言葉">
+
+<button onclick="searchWeb()">Googleで検索</button>
+
+</section>
+
+<script>
+
+const getData=k=>JSON.parse(localStorage.getItem(k)||"[]");
+
+const saveData=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+function clock(){
+
+ document.getElementById("clock").textContent=new Date().toLocaleString("ja-JP");
+
+}
+
+setInterval(clock,1000);clock();
+
+function sendMessage(){
+
+ const input=document.getElementById("message");
+
+ const value=input.value.trim();if(!value)return;
+
+ const chat=document.getElementById("chat");
+
+ chat.innerHTML+="<div>あなた："+escapeHTML(value)+"</div>";
+
+ let reply="メッセージを受け取りました。まだデモ版なので、本物のAI接続はこれからです。";
+
+ if(value.includes("こんにちは"))reply="こんにちは！今日もよろしくお願いします！";
+
+ if(value.includes("時間"))reply="現在時刻は"+new Date().toLocaleTimeString("ja-JP")+"です。";
+
+ if(value.includes("ありがとう"))reply="どういたしまして！";
+
+ chat.innerHTML+="<div>JARVIS："+reply+"</div>";
+
+ chat.scrollTop=chat.scrollHeight;input.value="";
+
+}
+
+function escapeHTML(s){
+
+ return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+}
+
+function speak(s){
+
+ if("speechSynthesis" in window){
+
+  speechSynthesis.cancel();
+
+  speechSynthesis.speak(new SpeechSynthesisUtterance(s));
+
+ }
+
+}
+
+function voiceInput(){
+
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+ if(!SR){alert("このブラウザでは音声入力に対応していません。キーボードのマイクを試してね。");return;}
+
+ const r=new SR();r.lang="ja-JP";
+
+ r.onresult=e=>{document.getElementById("message").value=e.results[0][0].transcript;};
+
+ r.start();
+
+}
+
+function addTask(){
+
+ const v=document.getElementById("task").value.trim();if(!v)return;
+
+ const a=getData("tasks");a.push(v);saveData("tasks",a);
+
+ document.getElementById("task").value="";renderTasks();
+
+}
+
+function renderTasks(){
+
+ document.getElementById("tasks").innerHTML=getData("tasks").map((v,i)=>
+
+ `<div class="item">${escapeHTML(v)} <button onclick="removeTask(${i})">完了・削除</button></div>`).join("");
+
+}
+
+function removeTask(i){const a=getData("tasks");a.splice(i,1);saveData("tasks",a);renderTasks();}
+
+function addMoney(){
+
+ const n=Number(document.getElementById("amount").value);
+
+ const memo=document.getElementById("memo").value.trim();
+
+ if(!n||n<0){alert("金額を入力してね");return;}
+
+ const a=getData("money");a.push({n,kind:document.getElementById("kind").value,memo});
+
+ saveData("money",a);document.getElementById("amount").value="";
+
+ document.getElementById("memo").value="";renderMoney();
+
+}
+
+function renderMoney(){
+
+ const a=getData("money");
+
+ const income=a.filter(x=>x.kind==="income").reduce((s,x)=>s+x.n,0);
+
+ const expense=a.filter(x=>x.kind==="expense").reduce((s,x)=>s+x.n,0);
+
+ document.getElementById("money").innerHTML=
+
+ `<p>収入：${income.toLocaleString()}円</p><p>支出：${expense.toLocaleString()}円</p><p>差額：${(income-expense).toLocaleString()}円</p>`+
+
+ a.map(x=>`<div class="item">${x.kind==="income"?"収入":"支出"}：${x.n}円 ${escapeHTML(x.memo)}</div>`).join("");
+
+}
+
+function addIdea(){
+
+ const v=document.getElementById("idea").value.trim();if(!v)return;
+
+ const a=getData("ideas");a.push(v);saveData("ideas",a);
+
+ document.getElementById("idea").value="";renderIdeas();
+
+}
+
+function renderIdeas(){
+
+ document.getElementById("ideas").innerHTML=getData("ideas").map(v=>`<div class="item">${escapeHTML(v)}</div>`).join("");
+
+}
+
+function searchWeb(){
+
+ const v=document.getElementById("search").value.trim();if(v)window.open("https://www.google.com/search?q="+encodeURIComponent(v),"_blank");
+
+}
+
+renderTasks();renderMoney();renderIdeas();
+
+</script>
+
+</body>
+
+</html>
