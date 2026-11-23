@@ -1,281 +1,161 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="ja">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
 <title>MY JARVIS</title>
-
 <style>
-
-*{box-sizing:border-box}
-
-body{margin:0;background:#080e19;color:#e8f4ff;font-family:Arial,sans-serif;padding:18px}
-
-header{text-align:center;padding:25px 0}
-
-h1{color:#45d9ff;letter-spacing:4px}
-
-.sub{color:#8ba9c3;font-size:13px}
-
-section{background:#111d2d;border:1px solid #25445d;border-radius:14px;padding:16px;margin:14px 0}
-
-h2{font-size:17px;color:#54dfff;margin-top:0}
-
-input,textarea,button{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #36546b;background:#091421;color:white;font-size:15px}
-
-button{background:#087da5;border:0;font-weight:bold}
-
-button:active{opacity:.7}
-
-.item{padding:10px;border-bottom:1px solid #294052;overflow-wrap:anywhere}
-
-.small{font-size:12px;color:#91a9bd}
-
-#chat{height:180px;overflow:auto;background:#091421;padding:10px;border-radius:8px}
-
+:root{--bg:#0b1020;--panel:#141d33;--panel2:#1b2945;--line:#2a3a5d;--txt:#eef4ff;--muted:#9eacc8;--blue:#68a7ff;--cyan:#6be0df;--good:#7ee0aa;--warn:#ffd27a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#172747 0,#0b1020 48%);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+header{padding:24px 18px 12px;max-width:1100px;margin:auto}h1{margin:0;font-size:28px;letter-spacing:2px}header p{color:var(--muted);margin:7px 0}
+main{max-width:1100px;margin:auto;padding:10px 16px 50px}.nav{display:flex;gap:8px;overflow:auto;padding:8px 0 16px}.nav button{white-space:nowrap}
+button,.btn{border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:12px;padding:11px 14px;font-size:14px;cursor:pointer}
+button.primary{background:linear-gradient(135deg,#347de0,#2862bb);border-color:#5797ed}
+button:disabled{opacity:.45;cursor:not-allowed}
+.panel{display:none;background:rgba(20,29,51,.94);border:1px solid var(--line);border-radius:18px;padding:17px;margin:8px 0 18px;box-shadow:0 12px 36px #0003}.panel.active{display:block}
+h2{font-size:20px;margin:0 0 14px}h3{font-size:15px;margin:16px 0 8px}
+label{display:block;color:var(--muted);font-size:13px;margin:12px 0 6px}
+input,textarea,select{width:100%;border:1px solid var(--line);background:#0c1427;color:var(--txt);border-radius:11px;padding:12px;font:inherit}
+textarea{min-height:90px;resize:vertical}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
+.muted,.hint{color:var(--muted);font-size:13px;line-height:1.6}.hint{background:#101a30;border:1px solid var(--line);padding:11px;border-radius:12px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.tile{background:#101a30;border:1px solid var(--line);border-radius:14px;padding:14px}
+.list{display:grid;gap:8px;margin-top:10px}.item{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#101a30;padding:10px;border-radius:10px;border:1px solid var(--line)}
+.small{font-size:12px;color:var(--muted)}.danger{color:#ff9c9c}.preview{background:#080d18;border:1px dashed #49628d;border-radius:14px;min-height:160px;display:grid;place-items:center;overflow:hidden}
+.preview img{max-width:100%;max-height:360px;object-fit:contain}.scene{display:flex;gap:10px;align-items:center;background:#101a30;padding:8px;border-radius:10px;margin:7px 0}.scene img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+progress{width:100%;accent-color:var(--blue)}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(min-width:700px){.panel{padding:22px}}
 </style>
-
 </head>
-
 <body>
+<header><h1>MY JARVIS</h1><p>PERSONAL ASSISTANT & CREATIVE STUDIO</p></header>
+<main>
+<nav class="nav">
+<button class="primary" data-tab="video">ð¬ åç»å¶ä½</button>
+<button data-tab="chat">ð¤ AIã¢ã·ã¹ã¿ã³ã</button>
+<button data-tab="tasks">â ã¿ã¹ã¯</button>
+<button data-tab="money">ï¿¥ åæ¯</button>
+<button data-tab="ideas">ð¡ ã¢ã¤ãã¢</button>
+<button data-tab="search">â æ¤ç´¢</button>
+</nav>
 
-<header>
+<section id="video" class="panel active">
+<h2>ð¬ åç»å¶ä½ã¹ã¿ã¸ãª</h2>
+<p class="muted">ç´ æããä½ãåç»ãããã¼ãããæ°ããä¼ç»ããåç»ããããããå§ãããã¾ãã</p>
+<div class="grid">
+<div class="tile"><b>â  ãã¼ãããæ°è¦ä½æ</b><p class="small">ãã¼ããå¥åããã¨ãå°æ¬ã»ã·ã¼ã³æ¡ã»å­å¹ã®ãããå°ãä½ãã¾ãã</p></div>
+<div class="tile"><b>â¡ ç´ æããåç»ä½æ</b><p class="small">åçã¨é³å£°ãçµã¿åããã¦ãç¸¦åã»æ¨ªååç»ãæ¸ãåºãã¾ãã</p></div>
+</div>
+<label for="topic">åç»ã®ãã¼ãã»ã¢ã¤ãã¢</label>
+<textarea id="topic" placeholder="ä¾ï¼é«æ ¡åå­¦ã®ã¢ã«æ¿åº¦ã20ç§ã§è§£èª¬"></textarea>
+<div class="row">
+<div><label for="duration">ç®æ¨ã®é·ã</label><select id="duration"><option value="15">ç´15ç§</option><option value="20" selected>ç´20ç§</option><option value="30">ç´30ç§</option><option value="60">ç´60ç§</option></select></div>
+<div><label for="ratio">åç»ã®åã</label><select id="ratio"><option value="vertical">ç¸¦å 9:16ï¼ãªã¼ã«åãï¼</option><option value="horizontal">æ¨ªå 16:9</option><option value="square">æ­£æ¹å½¢ 1:1</option></select></div>
+</div>
+<button class="primary" id="makePlan">å°æ¬ã»ã·ã¼ã³æ¡ãä½ã</button>
+<label for="script">ãã¬ã¼ã·ã§ã³åç¨¿ï¼èªç±ã«ç·¨éã§ãã¾ãï¼</label>
+<textarea id="script" placeholder="ããã«ãã¬ã¼ã·ã§ã³åç¨¿ãå¥ãã¾ã"></textarea>
+<div class="row">
+<button id="speak">ð é³å£°ãè©¦è´</button>
+<button id="stopSpeak">è©¦è´ãåæ­¢</button>
+</div>
+<p class="hint">é³å£°è©¦è´ã¯iPhoneãªã©ã®ãã©ã¦ã¶åèµé³å£°ã§ããè©¦è´ããé³å£°ãåç»ãã¡ã¤ã«ã«ç´æ¥é²é³ããæ©è½ã§ã¯ããã¾ãããåç»ã«é³å£°ãå¥ããã«ã¯ãä¸ã®é²é³æ©è½ãé³å£°ãã¡ã¤ã«ãä½¿ã£ã¦ãã ããã</p>
 
-<h1>MY JARVIS</h1>
-
-<div class="sub">YOUR PERSONAL AI ASSISTANT</div>
-
-<p id="clock"></p>
-
-</header>
-
-<section>
-
-<h2>💬 AIチャット（デモ）</h2>
-
-<div id="chat">JARVIS：こんにちは！何でも話しかけてください。</div>
-
-<input id="message" placeholder="メッセージを入力">
-
-<button onclick="sendMessage()">送信</button>
-
-<button onclick="voiceInput()">🎤 音声入力</button>
-
-<button onclick="speak('こんにちは。今日もよろしくお願いします。')">🔊 音声テスト</button>
-
-<p class="small">※現在はデモ版です。本物のAIとの接続はまだありません。</p>
-
+<h3>ç»åã»æ åç´ æ</h3>
+<label for="images">åçã»ç»åãè¿½å ï¼è¤æ°é¸æå¯ï¼</label>
+<input id="images" type="file" accept="image/*" multiple>
+<div id="sceneList" class="list"></div>
+<label for="audioFile">ãã¬ã¼ã·ã§ã³ã»BGMã®é³å£°ãã¡ã¤ã«ï¼ä»»æï¼</label>
+<input id="audioFile" type="file" accept="audio/*">
+<div class="row">
+<button id="recordStart">ð èªåã®å£°ãé²é³</button>
+<button id="recordStop" disabled>é²é³ãçµäº</button>
+</div>
+<p id="recordStatus" class="small">é²é³ã«ã¯ãã¤ã¯ã®è¨±å¯ãå¿è¦ã§ããiPhoneã§ã¯HTTPSã®ãã¼ã¸ã§éãã¦ãã ããã</p>
+<h3>åç»ãã¬ãã¥ã¼</h3>
+<div class="preview"><canvas id="canvas" width="720" height="1280" style="width:min(100%,260px);height:auto;background:#111"></canvas></div>
+<div class="row" style="margin-top:12px">
+<button class="primary" id="export">åç»ãæ¸ãåºã</button>
+<a id="download" class="btn" style="display:none;text-align:center;text-decoration:none" download="my-jarvis-video.webm">åç»ãä¿å­</a>
+</div>
+<p id="exportStatus" class="small">ç»åã¨é³å£°ãé¸ãã§ããæ¸ãåºãã¦ãã ããã</p>
+<div class="hint"><b>ç¡æçã®ç¯å²ï¼</b>ãã®ãã¼ã¸ã§ã¯ãå°æ¬æ¡ã®ä½æãç»åã®ã¹ã©ã¤ãåç»åãé²é³ããã©ã¦ã¶é³å£°ã®è©¦è´ãã§ãã¾ããAIã«ããæ¬æ ¼çãªæ åçæãèªåAIé³å£°çæã¯ã¾ã æ¥ç¶ããã¦ãã¾ãããæ¸ãåºãå½¢å¼ã¯iPhoneãã©ã¦ã¶ã®å¯¾å¿ç¶æ³ã«ããWebMã«ãªãã¾ããMP4å¤æã¯å¥éå¯¾å¿ãå¿è¦ã§ãã</div>
 </section>
 
-<section>
-
-<h2>✅ タスク管理</h2>
-
-<input id="task" placeholder="やることを入力">
-
-<button onclick="addTask()">タスク追加</button>
-
-<div id="tasks"></div>
-
+<section id="chat" class="panel">
+<h2>ð¤ AIã¢ã·ã¹ã¿ã³ã</h2><p class="hint">ç¾å¨ã¯åä½ç¢ºèªç¨ã®ç°¡æãã£ããã§ããæ¬ç©ã®çæAIã«ã¯æ¥ç¶ããã¦ãã¾ããã</p>
+<div id="chatLog" class="list"><div class="item">MY JARVISï¼ããã«ã¡ã¯ãç¸è«åå®¹ãå¥åãã¦ã­ã</div></div>
+<label for="chatInput">ã¡ãã»ã¼ã¸</label><textarea id="chatInput" placeholder="è³ªåãç¸è«ãå¥å"></textarea><button class="primary" id="sendChat">éä¿¡</button>
 </section>
 
-<section>
+<section id="tasks" class="panel"><h2>â ã¿ã¹ã¯ç®¡ç</h2><label for="taskInput">æ°ããã¿ã¹ã¯</label><div class="row"><input id="taskInput" placeholder="ä¾ï¼åç»ã®å°æ¬ãèãã"><button class="primary" id="addTask">è¿½å </button></div><div id="taskList" class="list"></div></section>
 
-<h2>💰 収支管理</h2>
+<section id="money" class="panel"><h2>ï¿¥ åæ¯ç®¡ç</h2><div class="row"><div><label for="moneyType">ç¨®é¡</label><select id="moneyType"><option value="expense">æ¯åº</option><option value="income">åå¥</option></select></div><div><label for="moneyAmount">éé¡ï¼åï¼</label><input id="moneyAmount" type="number" min="0" placeholder="500"></div></div><label for="moneyMemo">åå®¹</label><input id="moneyMemo" placeholder="ä¾ï¼ææ¿å·"><button class="primary" id="addMoney" style="margin-top:12px">è¨é²ãã</button><h3 id="balance">åå¥ 0å / æ¯åº 0å</h3><div id="moneyList" class="list"></div></section>
 
-<input id="amount" type="number" placeholder="金額（円）">
+<section id="ideas" class="panel"><h2>ð¡ ã¢ã¤ãã¢ãã¼ã</h2><label for="ideaInput">ã¢ã¤ãã¢</label><textarea id="ideaInput" placeholder="æãã¤ãããã¨ãã¡ã¢"></textarea><button class="primary" id="addIdea">ä¿å­</button><div id="ideaList" class="list"></div></section>
 
-<select id="kind">
-
-<option value="income">収入</option>
-
-<option value="expense">支出</option>
-
-</select>
-
-<input id="memo" placeholder="内容">
-
-<button onclick="addMoney()">記録する</button>
-
-<div id="money"></div>
-
-</section>
-
-<section>
-
-<h2>💡 アイデアノート</h2>
-
-<textarea id="idea" rows="3" placeholder="思いついたことを書く"></textarea>
-
-<button onclick="addIdea()">保存</button>
-
-<div id="ideas"></div>
-
-</section>
-
-<section>
-
-<h2>🔎 インターネット検索</h2>
-
-<input id="search" placeholder="検索したい言葉">
-
-<button onclick="searchWeb()">Googleで検索</button>
-
-</section>
-
+<section id="search" class="panel"><h2>â ã¤ã³ã¿ã¼ãããæ¤ç´¢</h2><label for="searchInput">æ¤ç´¢ãããè¨è</label><input id="searchInput" placeholder="æ¤ç´¢ã­ã¼ã¯ã¼ã"><button class="primary" id="doSearch" style="margin-top:10px">Googleã§æ¤ç´¢</button></section>
+<footer>MY JARVIS Â· ãã©ã¦ã¶åã«ä¿å­ããããã¼ã¿ã¯ããã®ç«¯æ«ã»ãã©ã¦ã¶åã§ã®ã¿å©ç¨ã§ãã¾ãã</footer>
+</main>
 <script>
-
-const getData=k=>JSON.parse(localStorage.getItem(k)||"[]");
-
-const saveData=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-
-function clock(){
-
- document.getElementById("clock").textContent=new Date().toLocaleString("ja-JP");
-
-}
-
-setInterval(clock,1000);clock();
-
-function sendMessage(){
-
- const input=document.getElementById("message");
-
- const value=input.value.trim();if(!value)return;
-
- const chat=document.getElementById("chat");
-
- chat.innerHTML+="<div>あなた："+escapeHTML(value)+"</div>";
-
- let reply="メッセージを受け取りました。まだデモ版なので、本物のAI接続はこれからです。";
-
- if(value.includes("こんにちは"))reply="こんにちは！今日もよろしくお願いします！";
-
- if(value.includes("時間"))reply="現在時刻は"+new Date().toLocaleTimeString("ja-JP")+"です。";
-
- if(value.includes("ありがとう"))reply="どういたしまして！";
-
- chat.innerHTML+="<div>JARVIS："+reply+"</div>";
-
- chat.scrollTop=chat.scrollHeight;input.value="";
-
-}
-
-function escapeHTML(s){
-
- return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-}
-
-function speak(s){
-
- if("speechSynthesis" in window){
-
-  speechSynthesis.cancel();
-
-  speechSynthesis.speak(new SpeechSynthesisUtterance(s));
-
- }
-
-}
-
-function voiceInput(){
-
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-
- if(!SR){alert("このブラウザでは音声入力に対応していません。キーボードのマイクを試してね。");return;}
-
- const r=new SR();r.lang="ja-JP";
-
- r.onresult=e=>{document.getElementById("message").value=e.results[0][0].transcript;};
-
- r.start();
-
-}
-
-function addTask(){
-
- const v=document.getElementById("task").value.trim();if(!v)return;
-
- const a=getData("tasks");a.push(v);saveData("tasks",a);
-
- document.getElementById("task").value="";renderTasks();
-
-}
-
-function renderTasks(){
-
- document.getElementById("tasks").innerHTML=getData("tasks").map((v,i)=>
-
- `<div class="item">${escapeHTML(v)} <button onclick="removeTask(${i})">完了・削除</button></div>`).join("");
-
-}
-
-function removeTask(i){const a=getData("tasks");a.splice(i,1);saveData("tasks",a);renderTasks();}
-
-function addMoney(){
-
- const n=Number(document.getElementById("amount").value);
-
- const memo=document.getElementById("memo").value.trim();
-
- if(!n||n<0){alert("金額を入力してね");return;}
-
- const a=getData("money");a.push({n,kind:document.getElementById("kind").value,memo});
-
- saveData("money",a);document.getElementById("amount").value="";
-
- document.getElementById("memo").value="";renderMoney();
-
-}
-
-function renderMoney(){
-
- const a=getData("money");
-
- const income=a.filter(x=>x.kind==="income").reduce((s,x)=>s+x.n,0);
-
- const expense=a.filter(x=>x.kind==="expense").reduce((s,x)=>s+x.n,0);
-
- document.getElementById("money").innerHTML=
-
- `<p>収入：${income.toLocaleString()}円</p><p>支出：${expense.toLocaleString()}円</p><p>差額：${(income-expense).toLocaleString()}円</p>`+
-
- a.map(x=>`<div class="item">${x.kind==="income"?"収入":"支出"}：${x.n}円 ${escapeHTML(x.memo)}</div>`).join("");
-
-}
-
-function addIdea(){
-
- const v=document.getElementById("idea").value.trim();if(!v)return;
-
- const a=getData("ideas");a.push(v);saveData("ideas",a);
-
- document.getElementById("idea").value="";renderIdeas();
-
-}
-
-function renderIdeas(){
-
- document.getElementById("ideas").innerHTML=getData("ideas").map(v=>`<div class="item">${escapeHTML(v)}</div>`).join("");
-
-}
-
-function searchWeb(){
-
- const v=document.getElementById("search").value.trim();if(v)window.open("https://www.google.com/search?q="+encodeURIComponent(v),"_blank");
-
-}
-
-renderTasks();renderMoney();renderIdeas();
-
+const $=id=>document.getElementById(id);
+const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));$(b.dataset.tab).classList.add('active');document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('primary',x===b))}));
+
+// Tasks
+let tasks=load('mj_tasks');function renderTasks(){$('taskList').innerHTML='';tasks.forEach((t,i)=>{let d=document.createElement('div');d.className='item';d.innerHTML=`<span>${t.done?'â':'â'} ${esc(t.text)}</span><span><button data-done="${i}">å®äº</button> <button data-del="${i}">åé¤</button></span>`;$('taskList').append(d)});$('taskList').querySelectorAll('[data-done]').forEach(b=>b.onclick=()=>{tasks[+b.dataset.done].done=!tasks[+b.dataset.done].done;save('mj_tasks',tasks);renderTasks()});$('taskList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{tasks.splice(+b.dataset.del,1);save('mj_tasks',tasks);renderTasks()})}
+$('addTask').onclick=()=>{let v=$('taskInput').value.trim();if(!v)return;tasks.push({text:v,done:false});save('mj_tasks',tasks);$('taskInput').value='';renderTasks()};renderTasks();
+
+// Money
+let money=load('mj_money');function renderMoney(){let inc=money.filter(x=>x.type==='income').reduce((a,x)=>a+x.amount,0),out=money.filter(x=>x.type==='expense').reduce((a,x)=>a+x.amount,0);$('balance').textContent=`åå¥ ${inc.toLocaleString()}å / æ¯åº ${out.toLocaleString()}å / å·®é¡ ${(inc-out).toLocaleString()}å`;$('moneyList').innerHTML='';money.forEach((m,i)=>{let d=document.createElement('div');d.className='item';d.innerHTML=`<span>${m.type==='income'?'åå¥':'æ¯åº'}ï¼${esc(m.memo)} ${m.amount.toLocaleString()}å</span><button data-del="${i}">åé¤</button>`;$('moneyList').append(d)});$('moneyList').querySelectorAll('button').forEach(b=>b.onclick=()=>{money.splice(+b.dataset.del,1);save('mj_money',money);renderMoney()})}
+$('addMoney').onclick=()=>{let amount=Number($('moneyAmount').value);if(!Number.isFinite(amount)||amount<=0)return alert('éé¡ãå¥åãã¦ã­');money.push({type:$('moneyType').value,amount,memo:$('moneyMemo').value.trim()||'è¨é²'});save('mj_money',money);$('moneyAmount').value='';$('moneyMemo').value='';renderMoney()};renderMoney();
+
+// Ideas
+let ideas=load('mj_ideas');function renderIdeas(){$('ideaList').innerHTML='';ideas.forEach((v,i)=>{let d=document.createElement('div');d.className='item';let s=document.createElement('span');s.textContent=v;let b=document.createElement('button');b.textContent='åé¤';b.onclick=()=>{ideas.splice(i,1);save('mj_ideas',ideas);renderIdeas()};d.append(s,b);$('ideaList').append(d)})}
+$('addIdea').onclick=()=>{let v=$('ideaInput').value.trim();if(!v)return;ideas.unshift(v);save('mj_ideas',ideas);$('ideaInput').value='';renderIdeas()};renderIdeas();
+
+// Demo chat
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('sendChat').onclick=()=>{let v=$('chatInput').value.trim();if(!v)return;let a=document.createElement('div');a.className='item';a.textContent='ããªãï¼'+v;$('chatLog').append(a);let r=document.createElement('div');r.className='item';r.textContent='MY JARVISï¼ããã¯ãã¢å¿ç­ã§ããæ¬ç©ã®AIã«ã¯ã¾ã æ¥ç¶ããã¦ãã¾ããã';$('chatLog').append(r);$('chatInput').value=''};
+$('doSearch').onclick=()=>{let q=$('searchInput').value.trim();if(q)window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener')};
+
+// Video studio
+let photos=[],photoURLs=[],recordedBlob=null,mediaRecorder=null,recordChunks=[];
+function cleanupURLs(){photoURLs.forEach(URL.revokeObjectURL);photoURLs=[]}
+function drawCover(ctx,img,w,h){let scale=Math.max(w/img.width,h/img.height),sw=w/scale,sh=h/scale,sx=(img.width-sw)/2,sy=(img.height-sh)/2;ctx.drawImage(img,sx,sy,sw,sh,0,0,w,h)}
+function dimensions(){let r=$('ratio').value;return r==='horizontal'?[1280,720]:r==='square'?[900,900]:[720,1280]}
+function refreshScenes(){cleanupURLs();$('sceneList').innerHTML='';photos.forEach((f,i)=>{let u=URL.createObjectURL(f);photoURLs.push(u);let d=document.createElement('div');d.className='scene';let im=document.createElement('img');im.src=u;let span=document.createElement('span');span.textContent=`ç»å ${i+1}ï¼${f.name}`;d.append(im,span);$('sceneList').append(d)});drawPreview()}
+$('images').addEventListener('change',e=>{photos=Array.from(e.target.files||[]);refreshScenes()});
+function drawPreview(){let [w,h]=dimensions(),c=$('canvas'),ctx=c.getContext('2d');c.width=w;c.height=h;ctx.fillStyle='#111827';ctx.fillRect(0,0,w,h);if(photos.length){let im=new Image();im.onload=()=>{drawCover(ctx,im,w,h);ctx.fillStyle='#0009';ctx.fillRect(0,h*.78,w,h*.22);ctx.fillStyle='white';ctx.font=`bold ${Math.round(w*.045)}px sans-serif`;ctx.textAlign='center';wrapText(ctx,$('script').value||$('topic').value,w/2,h*.83,w*.84,Math.round(w*.06))};im.src=photoURLs[0]}else{ctx.fillStyle='#a9b8d5';ctx.textAlign='center';ctx.font='28px sans-serif';ctx.fillText('ç»åãè¿½å ããã¨ãã¬ãã¥ã¼',w/2,h/2)}}
+function wrapText(ctx,text,x,y,maxWidth,lineHeight){let words=String(text).split(/\s+/),line='',lines=[];for(let word of words){let test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);lines.slice(0,4).forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight))}
+$('ratio').onchange=drawPreview;$('script').oninput=drawPreview;
+$('makePlan').onclick=()=>{let topic=$('topic').value.trim();if(!topic)return alert('ãã¼ããå¥åãã¦ã­');let secs=Number($('duration').value);$('script').value=`ã${topic}ã\n\nããã«ã¡ã¯ï¼ä»åã¯ã${topic}ãã«ã¤ãã¦ç´¹ä»ãã¾ãã\nã¾ããéè¦ãªãã¤ã³ããç¢ºèªãã¾ãããã\næ¬¡ã«ãå·ä½ä¾ãè¦ã¦ããã¾ãã\næå¾ã«ãä»æ¥ã®ãã¤ã³ããæ¯ãè¿ãã¾ãããã\nãè¦è´ãããã¨ããããã¾ããï¼`;drawPreview();$('exportStatus').textContent=`ç´${secs}ç§åãã®å°æ¬æ¡ãä½æãã¾ãããåå®¹ãç¢ºèªãã¦ç·¨éãã¦ãã ããã`};
+$('speak').onclick=()=>{if(!('speechSynthesis'in window))return alert('ãã®ãã©ã¦ã¶ã§ã¯é³å£°èª­ã¿ä¸ãã«å¯¾å¿ãã¦ãã¾ãã');speechSynthesis.cancel();let u=new SpeechSynthesisUtterance($('script').value||$('topic').value||'èª­ã¿ä¸ããæç« ãå¥åãã¦ãã ãã');u.lang='ja-JP';speechSynthesis.speak(u)};
+$('stopSpeak').onclick=()=>{if('speechSynthesis'in window)speechSynthesis.cancel()};
+$('recordStart').onclick=async()=>{try{let stream=await navigator.mediaDevices.getUserMedia({audio:true});recordChunks=[];mediaRecorder=new MediaRecorder(stream);mediaRecorder.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};mediaRecorder.onstop=()=>{recordedBlob=new Blob(recordChunks,{type:mediaRecorder.mimeType||'audio/webm'});$('audioFile').dataset.recorded='yes';$('recordStatus').textContent='é²é³ã§ãã¾ãããåç»ã«é³å£°ã¨ãã¦è¿½å ãã¾ãã';stream.getTracks().forEach(t=>t.stop())};mediaRecorder.start();$('recordStart').disabled=true;$('recordStop').disabled=false;$('recordStatus').textContent='é²é³ä¸­â¦'}catch(e){alert('ãã¤ã¯ãä½¿ãã¾ããã§ãããSafariã®ãã¤ã¯è¨±å¯ã¨HTTPSæ¥ç¶ãç¢ºèªãã¦ãã ããã')}};
+$('recordStop').onclick=()=>{if(mediaRecorder&&mediaRecorder.state!=='inactive'){mediaRecorder.stop();$('recordStart').disabled=false;$('recordStop').disabled=true}};
+$('audioFile').onchange=()=>{recordedBlob=null;$('audioFile').dataset.recorded='no';$('recordStatus').textContent=$('audioFile').files[0]?'é³å£°ãã¡ã¤ã«ãé¸æãã¾ããã':'é³å£°ãã¡ã¤ã«æªé¸æ'};
+async function loadAudio(){if(recordedBlob)return recordedBlob;let f=$('audioFile').files[0];return f||null}
+$('export').onclick=async()=>{
+ if(!photos.length)return alert('åã«ç»åãè¿½å ãã¦ã­');
+ let blob=await loadAudio();if(!blob){let ok=confirm('é³å£°ãããã¾ãããç¡é³ã®ã¹ã©ã¤ãåç»ãä½ãã¾ããï¼');if(!ok)return}
+ let c=$('canvas'),ctx=c.getContext('2d'),[w,h]=dimensions();c.width=w;c.height=h;
+ let mime=['video/mp4;codecs=h264','video/webm;codecs=vp9','video/webm'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';
+ if(!window.MediaRecorder||!c.captureStream){alert('ãã®ãã©ã¦ã¶ã¯åç»æ¸ãåºãã«å¯¾å¿ãã¦ãã¾ãããå¥ã®å¯¾å¿ãã©ã¦ã¶ãè©¦ãã¦ãã ããã');return}
+ let stream=c.captureStream(25),audioCtx=null,source=null;
+ if(blob){try{audioCtx=new AudioContext();let ab=await blob.arrayBuffer(),decoded=await audioCtx.decodeAudioData(ab);source=audioCtx.createBufferSource();source.buffer=decoded;let dest=audioCtx.createMediaStreamDestination();source.connect(dest);dest.stream.getAudioTracks().forEach(t=>stream.addTrack(t));}catch(e){alert('ãã®é³å£°å½¢å¼ãèª­ã¿è¾¼ãã¾ããã§ãããå¥ã®é³å£°ãã¡ã¤ã«ãé²é³ãè©¦ãã¦ãã ããã');stream.getTracks().forEach(t=>t.stop());return}}
+ let chunks=[],rec;try{rec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined)}catch(e){alert('åç»é²ç»ãéå§ã§ãã¾ããã§ãã');return}
+ rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+ rec.onstop=()=>{let out=new Blob(chunks,{type:rec.mimeType||'video/webm'}),url=URL.createObjectURL(out);$('download').href=url;$('download').download=out.type.includes('mp4')?'my-jarvis-video.mp4':'my-jarvis-video.webm';$('download').style.display='block';$('download').textContent='å®æåç»ãä¿å­';$('exportStatus').textContent=`å®æãã¾ããï¼${Math.round(out.size/1024)} KBï¼ãä¿å­ãªã³ã¯ãæ¼ãã¦ãã ããã`;stream.getTracks().forEach(t=>t.stop());if(audioCtx)audioCtx.close()};
+ rec.start();$('export').disabled=true;$('exportStatus').textContent='åç»ãä½æä¸­â¦';
+ if(source){source.start()}let duration=blob?Math.max(2,Math.min(180,Number($('duration').value),await getDuration(blob))):Number($('duration').value);
+ let start=performance.now(),imgs=await Promise.all(photos.map(f=>new Promise((resolve,reject)=>{let im=new Image(),u=URL.createObjectURL(f);im.onload=()=>resolve({im,u});im.onerror=reject;im.src=u})));
+ function frame(now){let elapsed=(now-start)/1000,idx=Math.min(imgs.length-1,Math.floor(elapsed/Math.max(.5,duration/imgs.length)));drawCover(ctx,imgs[idx].im,w,h);let caption=$('script').value||$('topic').value;ctx.fillStyle='#000a';ctx.fillRect(0,h*.76,w,h*.24);ctx.fillStyle='white';ctx.textAlign='center';ctx.font=`bold ${Math.round(w*.045)}px sans-serif`;wrapText(ctx,caption,w/2,h*.81,w*.86,Math.round(w*.055));if(elapsed<duration){requestAnimationFrame(frame)}else{rec.stop();$('export').disabled=false;imgs.forEach(x=>URL.revokeObjectURL(x.u))}}
+ requestAnimationFrame(frame);
+};
+async function getDuration(blob){try{let ac=new AudioContext(),buf=await ac.decodeAudioData(await blob.arrayBuffer()),d=buf.duration;ac.close();return d}catch{return Number($('duration').value)}}
+drawPreview();
 </script>
-
-</body>
-
-</html>
+</body></html>
